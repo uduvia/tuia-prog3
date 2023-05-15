@@ -8,11 +8,11 @@ Formulacion de estado completo para el Problema del Viajante:
 * Estados:
     Consideramos n ciudades enumeradas del 0 al n-1.
     Cada estado es de la forma [0] ++ permutacion(1,n) ++ [0].
-    Total de estados: n!
+    Total de estados: (n-1)! pues la primera ciudad del tour ya esta fija.
     Ejemplo con n = 4: [0,1,2,3,0], [0,1,3,2,0], etc.
 
 * Estado inicial.
-    Consideramos el estado inicial [0,1,2,...,n].
+    Consideramos el estado inicial [0,1,2,...,n,0].
     Pero cualquier estado puede ser inicial.
 
 * Acciones.
