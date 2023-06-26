@@ -7,12 +7,12 @@ Formulacion de estado completo para el Problema del Viajante:
 
 * Estados:
     Consideramos n ciudades enumeradas del 0 al n-1.
-    Cada estado es de la forma [0] ++ permutacion(1,n) ++ [0].
+    Cada estado es de la forma [0] ++ permutacion(1,n-1) ++ [0].
     Total de estados: (n-1)! pues la primera ciudad del tour ya esta fija.
     Ejemplo con n = 4: [0,1,2,3,0], [0,1,3,2,0], etc.
 
 * Estado inicial.
-    Consideramos el estado inicial [0,1,2,...,n,0].
+    Consideramos el estado inicial [0,1,2,...,n-1,0].
     Pero cualquier estado puede ser inicial.
 
 * Acciones.
@@ -21,7 +21,7 @@ Formulacion de estado completo para el Problema del Viajante:
     https://en.wikipedia.org/wiki/2-opt
     Cada accion se puede representar de la siguiente forma.
     (i,j): intercambiar la i-esima arista con la j-esima arista,
-    con 0 <= i < n-2, i+2 <= j < n.
+    con 0 <= i <= n-3, i+2 <= j <= n-1.
     Notar que las aristas elegidas no deben ser adyacentes.
 
 * Resultado.
@@ -187,9 +187,16 @@ class TSP(OptProblem):
             diff[a] = distl1l2 + distl3l4 - distl1l3 - distl2l4
         return diff
 
-    def random_reset(self) -> None:
-        """Reinicia de forma aleatoria del estado inicial del TSP."""
-        self.init = [i for i in range(1, self.G.number_of_nodes())]
-        shuffle(self.init)  # mezclar la lista
-        self.init.append(0)  # agregar a 0 como inicio del tour
-        self.init.insert(0, 0)  # agregar a 0 como fin del tour
+    def random_reset(self) -> list[int]:
+        """Devuelve un estado del TSP con un tour aleatorio.
+        
+        Retorno:
+        =======
+        state: list[int]
+            un estado
+        """
+        state = [i for i in range(1, self.G.number_of_nodes())]
+        shuffle(state)  # mezclar la lista
+        state.append(0)  # agregar a 0 como inicio del tour
+        state.insert(0, 0)  # agregar a 0 como fin del tour
+        return state
