@@ -6,7 +6,7 @@ class Solution:
     def __init__(
         self,
         node: Node,
-        explored: dict[tuple[int, int]],
+        reached: dict[tuple[int, int], any],
         time: float = 0
     ) -> None:
 
@@ -22,8 +22,8 @@ class Solution:
         self.path = path
         self.path_cost = node.cost
         self.path_length = len(path)
-        self.explored = list(explored)
-        self.explored_length = len(explored)
+        self.explored = list(reached)
+        self.explored_length = len(reached)
         self.time = time
 
     def __repr__(self) -> str:
@@ -36,14 +36,14 @@ class NoSolution(Solution):
 
     def __init__(
         self,
-        explored: dict[tuple[int, int]],
+        reached: dict[tuple[int, int], any],
         time: float = 0
     ) -> None:
         self.path = []
         self.path_cost = 0
         self.path_length = 0
-        self.explored = list(explored)
-        self.explored_length = len(explored)
+        self.explored = list(reached)
+        self.explored_length = len(reached)
         self.time = time
 
     def __repr__(self) -> str:
