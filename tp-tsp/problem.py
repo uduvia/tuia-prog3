@@ -1,6 +1,6 @@
 """Este modulo define la clase OptProblem.
 
-OptProblem representa un problema de optimizacion general.
+OptProblem representa un problema de optimizacion general (de maximización).
 La subclase TSP de OptProblem representa al Problema del Viajante.
 
 Formulacion de estado completo para el Problema del Viajante:
@@ -38,15 +38,15 @@ Formulacion de estado completo para el Problema del Viajante:
 
 from __future__ import annotations
 from typing import TypeVar
-from networkx import Graph
 from random import shuffle
+from networkx import Graph
 
 State = TypeVar('State')
 Action = TypeVar('Action')
 
 
 class OptProblem:
-    """Clase que representa un problema de optimizacion general."""
+    """Clase que representa un problema de optimizacion general (de maximización)."""
 
     def __init__(self) -> None:
         """Construye una instancia de la clase."""
@@ -64,11 +64,11 @@ class OptProblem:
         """Determina el valor objetivo de un estado."""
         raise NotImplementedError
 
-    def val_diff(self, state: State) -> dict[Action, float]:
-        """Determina la diferencia de valor objetivo al aplicar cada accion.
+    def max_action(self, state: list[int]) -> tuple[tuple[int, int], float]:
+        """Determina la accion que genera el sucesor con mayor valor objetivo para un estado dado.
 
-        El objetivo es que este metodo sea mas eficiente que generar cada
-        estado sucesor y calcular su valor objetivo.
+        La idea es que este metodo este optimizado y sea mas eficiente que generar cada
+        estado sucesor por separado y calcular su valor objetivo con self.obj_val().
         """
         raise NotImplementedError
 
@@ -90,7 +90,7 @@ class TSP(OptProblem):
             los nodos del grafo se enumeran de 1 a n, ¡cuidado!
         """
         self.G = G
-        self.init = [i for i in range(0, G.number_of_nodes())]
+        self.init = list(range(0, G.number_of_nodes()))
         self.init.append(0)
 
     def actions(self, state: list[int]) -> list[tuple[int, int]]:
@@ -153,15 +153,11 @@ class TSP(OptProblem):
             value -= self.G.get_edge_data(u, v)['weight']
         return value
 
-    def val_diff(self, state: list[int]) -> dict[tuple[int, int], float]:
-        """Determina la diferencia de valor objetivo al aplicar cada accion.
-
-        Para cada accion A de self.actions(state), determina la diferencia
-        de valor objetivo entre el estado sucesor y el estado actual, es decir,
-            self.obj_val(self.restult(state,a)) - self.obj_val(state)
-
-        El estado sucesor no es generado explicitamente por razones de
-        eficiencia.
+    def max_action(self, state: list[int]) -> tuple[tuple[int, int], float]:
+        """Determina la accion que genera el sucesor con mayor valor objetivo para un estado dado.
+        
+        Se encuentra optimizada y por razones de eficiencia no se generan los sucesores y 
+        tampoco se llama a self.obj_val().
 
         Argumentos:
         ==========
@@ -170,10 +166,14 @@ class TSP(OptProblem):
 
         Retorno:
         =======
-        diff: dict[tuple[int, int], float]
-            diccionario con las diferencias de valor objetivo
+        max_act: tuple[int, int]
+            accion que genera el sucesor con mayor valor objetivo
+        max_val: float
+            valor objetivo del sucesor que resulta de aplicar min_act
         """
-        diff = {}
+        value = self.obj_val(state)
+        max_act = None
+        max_val = float("-inf")
         for a in self.actions(state):
             i, j = a
             v1 = state[i]+1  # origen de i
@@ -184,8 +184,11 @@ class TSP(OptProblem):
             distl3l4 = self.G.get_edge_data(v3, v4)['weight']
             distl1l3 = self.G.get_edge_data(v1, v3)['weight']
             distl2l4 = self.G.get_edge_data(v2, v4)['weight']
-            diff[a] = distl1l2 + distl3l4 - distl1l3 - distl2l4
-        return diff
+            succ_value =  value + distl1l2 + distl3l4 - distl1l3 - distl2l4
+            if succ_value > max_val:
+                max_act = a
+                max_val = succ_value
+        return max_act, max_val
 
     def random_reset(self) -> list[int]:
         """Devuelve un estado del TSP con un tour aleatorio.
