@@ -50,7 +50,7 @@ class OptProblem:
 
     def __init__(self) -> None:
         """Construye una instancia de la clase."""
-        pass
+        self.init = None
 
     def actions(self, state: State) -> list[Action]:
         """Determina la lista de acciones que se pueden aplicar a un estado."""
@@ -71,7 +71,7 @@ class OptProblem:
         estado sucesor por separado y calcular su valor objetivo con self.obj_val().
         """
         raise NotImplementedError
-    
+
     def random_reset(self) -> State:
         """Retorna un estado generado al azar. 
         
@@ -96,6 +96,7 @@ class TSP(OptProblem):
             grafo con los datos del problema
             los nodos del grafo se enumeran de 1 a n, ¡cuidado!
         """
+        super().__init__()
         self.G = G
         self.init = list(range(0, G.number_of_nodes()))
         self.init.append(0)
