@@ -64,11 +64,18 @@ class OptProblem:
         """Determina el valor objetivo de un estado."""
         raise NotImplementedError
 
-    def max_action(self, state: list[int]) -> tuple[tuple[int, int], float]:
+    def max_action(self, state: State) -> tuple[Action, float]:
         """Determina la accion que genera el sucesor con mayor valor objetivo para un estado dado.
 
         La idea es que este metodo este optimizado y sea mas eficiente que generar cada
         estado sucesor por separado y calcular su valor objetivo con self.obj_val().
+        """
+        raise NotImplementedError
+    
+    def random_reset(self) -> State:
+        """Retorna un estado generado al azar. 
+        
+        Este método será necesario para implementar el reinicion aleatorio.
         """
         raise NotImplementedError
 
