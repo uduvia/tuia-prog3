@@ -1,5 +1,5 @@
 from ..models.grid import Grid
-from ..models.frontier import StackFrontier
+from ..models.frontier import PriorityQueueFrontier
 from ..models.solution import NoSolution, Solution
 from ..models.node import Node
 
@@ -18,10 +18,10 @@ class UniformCostSearch:
         # Initialize a node with the initial position
         node = Node("", grid.start, 0)
 
-        # Initialize the explored dictionary to be empty
-        explored = {} 
+        # Initialize the reached dictionary to be empty
+        reached = {} 
         
-        # Add the node to the explored dictionary
-        explored[node.state] = True
+        # Add the node to the reached dictionary
+        reached[node.state] = node.cost
         
-        return NoSolution(explored)
+        return NoSolution(reached)

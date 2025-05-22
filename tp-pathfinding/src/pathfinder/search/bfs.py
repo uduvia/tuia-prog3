@@ -18,10 +18,10 @@ class BreadthFirstSearch:
         # Initialize a node with the initial position
         node = Node("", grid.start, 0)
 
-        # Initialize the explored dictionary to be empty
-        explored = {} 
+        # Initialize the reached dictionary to be empty
+        reached = {} 
         
-        # Add the node to the explored dictionary
-        explored[node.state] = True
+        # Add the node to the reached dictionary
+        reached[node.state] = True
         
-        return NoSolution(explored)
+        return NoSolution(reached)
