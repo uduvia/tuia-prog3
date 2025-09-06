@@ -15,11 +15,15 @@ class AStarSearch:
         Returns:
             Solution: Solution found
         """
-        # Initialize a node with the initial position
-        node = Node("", state=grid.initial, cost=0, parent=None, action=None)
+        # Initialize root node
+        root = Node("", state=grid.initial, cost=0, parent=None, action=None)
 
         # Initialize reached with the initial state
         reached = {}
-        reached[node.state] = node.cost
-        
+        reached[root.state] = root.cost
+
+        # Initialize frontier with the root node
+        # TODO Complete the rest!!
+        # ...
+
         return NoSolution(reached)

@@ -11,15 +11,19 @@ class BreadthFirstSearch:
 
         Args:
             grid (Grid): Grid of points
-            
+
         Returns:
             Solution: Solution found
         """
-        # Initialize a node with the initial position
-        node = Node("", state=grid.initial, cost=0, parent=None, action=None)
+        # Initialize root node
+        root = Node("", state=grid.initial, cost=0, parent=None, action=None)
 
         # Initialize reached with the initial state
         reached = {}
-        reached[node.state] = True
+        reached[root.state] = True
+
+        # Initialize frontier with the root node
+        # TODO Complete the rest!!
+        # ...
 
         return NoSolution(reached)
