@@ -16,12 +16,10 @@ class BreadthFirstSearch:
             Solution: Solution found
         """
         # Initialize a node with the initial position
-        node = Node("", grid.start, 0)
+        node = Node("", state=grid.initial, cost=0, parent=None, action=None)
 
-        # Initialize the reached dictionary to be empty
-        reached = {} 
-        
-        # Add the node to the reached dictionary
+        # Initialize reached with the initial state
+        reached = {}
         reached[node.state] = True
-        
+
         return NoSolution(reached)

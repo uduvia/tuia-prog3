@@ -16,12 +16,10 @@ class DepthFirstSearch:
             Solution: Solution found
         """
         # Initialize a node with the initial position
-        node = Node("", grid.start, 0)
+        node = Node("", state=grid.initial, cost=0, parent=None, action=None)
 
-        # Initialize the explored dictionary to be empty
-        explored = {} 
-        
-        # Add the node to the explored dictionary
+        # Initialize explored with the initial state
+        explored = {}
         explored[node.state] = True
         
         return NoSolution(explored)
