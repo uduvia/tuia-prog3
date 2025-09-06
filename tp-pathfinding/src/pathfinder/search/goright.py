@@ -15,62 +15,49 @@ class GoRight:
         Returns:
             Solution: Solution found
         """
-        # Initialize a node with the initial position
-        node = Node("", state=grid.initial, cost=0, parent=None, action=None)
+        # Initialize root node
+        root = Node("", state=grid.initial, cost=0, parent=None, action=None)
 
         # Initialize reached with the initial state
         reached = {}
-        reached[node.state] = True
+        reached[root.state] = True
 
-        # Return if the node contains a goal state
-        if grid.objective_test(node.state):
-            return Solution(node, reached)
+        # Apply objective test
+        if grid.objective_test(root.state):
+            return Solution(root, reached)
 
-        # Initialize frontier with the initial node
-        # In this example, the frontier is a queue
-        frontier = QueueFrontier()
-        frontier.add(node)
+        # Current node, starting from the root
+        node = root
 
         while True:
 
-            #  Fail if the frontier is empty
-            if frontier.is_empty():
+            # Check if going right is possible
+            if "right" not in grid.actions(node.state):
                 return NoSolution(reached)
 
-            # Remove a node from the frontier
-            node = frontier.remove()
+            # Get the successor
+            successor = grid.result(node.state, "right")
 
-            # Iterate through the possible actions
-            for act in grid.actions(node.state):
+            # Check if the successor is reached
+            if successor in reached:
+                continue
 
-                # Ignore all actions except "right"
-                if act != "right":
-                    continue
+            # Initialize the son node
+            son = Node(
+                "",
+                successor,
+                cost=node.cost + grid.individual_cost(node.state, "right"),
+                parent=node,
+                action="right",
+            )
 
-                # Get the successor
-                new_state = grid.result(node.state, act)
+            # Mark the successor as reached
+            reached[successor] = True
 
-                # Check if the successor is reached
-                if new_state in reached:
-                    continue
+            # Apply objective test
+            if grid.objective_test(successor):
+                return Solution(son, reached)
+            
+            # Continue with the son
+            node = son
 
-                # Initialize the son node
-                new_node = Node(
-                    "",
-                    new_state,
-                    cost=node.cost + grid.individual_cost(node.state, act),
-                    parent=node,
-                    action="right",
-                )
-
-                # Mark the successor as reached
-                reached[new_state] = True
-
-                # Return if the node contains a goal state
-                # In this example, the goal test is run before adding the son to the
-                # frontier
-                if grid.objective_test(new_state):
-                    return Solution(new_node, reached)
-
-                # Add the new node to the frontier
-                frontier.add(new_node)
